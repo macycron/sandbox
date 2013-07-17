@@ -1,0 +1,49 @@
+http://wiki.bitnami.com/Infrastructure_Stacks/BitNami_Ruby_Stack
+
+startup the ruby servers with the windows program manager.
+
+then start the ruby concols.... w/  Use_ruby.bat
+
+Open the Ruby Stack console and go to the "projects" folder:
+$ cd projects/sample
+Then start the Rails server with the sample application:
+$ ruby script/rails server
+If you are using a previous version (Rails 2.x instead of Rails 3x), the command that you should execute is the
+following:
+$ ruby script/server
+You can see something like this:
+  => Booting WEBrick
+  => Rails 3.2.8 application starting on http://0.0.0.0:3000
+  => Call with -d to detach
+  => Ctrl-C to shutdown server
+  [     ] INFO  WEBrick 1.3.1
+  [     ] INFO  ruby 1.9.3 (2012-06-08) [i686-linux]
+  [     ] INFO  WEBrick::HTTPServer#start: pid=3061 port=3000
+Then try to access at http://localhost:3000 from your browser.
+LEAVE THIS WINDOW OPEN
+
+
+or do $ rails server
+
+start another use_ruby.bat
+
+uncomment this line:
+config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+in C:\BitNami\rubystack193\projects\sample\config\environments\production.rb
+
+gem 'neography'
+to the gem file
+
+
+require 'neography/tasks' 
+to the rakefile
+
+Fire up neo4j
+C:\neo4j-community-1.9.1-windows\bin\Neo4j.bat
+LEAVE THIS WINDOW OPEN
+
+in the RubyStackEnvironment console
+bundle install
+bundle show neography
+
+
