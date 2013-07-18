@@ -1,0 +1,229 @@
+CREATE (n 
+{ name:'device', ip:'10.0.0.1', lattitude:'44.012893', longitude:'-79.441833',battery:'3' }
+)-[:manages]->
+({ name:'route' })-[:contains]->
+({ name:'link',packetloss:'2',srcip:'10.0.0.1',destip:'10.0.0.1' })
+
+ RETURN n.name
+
+create 
+(_14  {ip:"10.0.0.2",name:"destination"}),
+(_15  {name:"link",packetloss:"2"}),
+(_16  {name:"route"}),
+(_17  {battery:"3",ip:"10.0.0.1",lattitude:"44.012893",longitude:"-79.441833",name:"device"}),
+_15-[:connects]->_14,
+_16-[:contains]->_15,
+_17-[:manages]->_16
+
+
+CREATE 
+(device0 { lattitude:'44.012893', longitude:'-79.441833',battery:'3' }),
+(device1 { lattitude:'45.012893', longitude:'-78.441833',battery:'4' }),
+(interface0 {  ip:'10.0.0.2' }),
+(interface1 {  ip:'10.0.0.2' }),
+(route0 { }),
+(route1 { }),
+(link0 { source: "10.0.0.1", destination: "10.0.0.2", packetloss:"8"}),
+(link1 { source: "10.0.0.1", destination: "10.0.0.3", packetloss:"7"}),
+(link2 { source: "10.0.0.2", destination: "10.0.0.3", packetloss:"6"}),
+(message0 { payload:"important data here to send",}),
+(source0 { ip:"10.0.0.1"}),
+(destination0 { ip:"10.0.0.4"}),
+
+message0-[:from]->source0,
+message0-[:to]->destination0,
+device0-[:runs]->interface0,
+interface0-[:knows]->route0,
+route0-[:contains {sinceUTC: 1374001581}]->link0,
+route0-[:contains {sinceUTC: 1374001393}]->link1,
+route0-[:contains {sinceUTC: 1374001469}]->link2,
+
+device1-[:has]->interface1,
+interface1-[:knows]->route1,
+route1-[:contains {sinceUTC: 1374001393}]->link0,
+route1-[:contains {sinceUTC: 1374001469}]->link1,
+route1-[:contains {sinceUTC: 1374001581}]->link2
+
+
+
+CREATE 
+(device0 { lattitude:'44.012893', longitude:'-79.441833',battery:'3' }),
+(device1 { lattitude:'45.012893', longitude:'-78.441833',battery:'4' }),
+(interface0 {  ip:'10.0.0.2' }),
+(interface1 {  ip:'10.0.0.2' }),
+(route0 { }),
+(route1 { }),
+(link0 { source: "10.0.0.1", destination: "10.0.0.2", packetloss:"8"}),
+(link1 { source: "10.0.0.1", destination: "10.0.0.3", packetloss:"7"}),
+(link2 { source: "10.0.0.2", destination: "10.0.0.3", packetloss:"6"}),
+(message0 { payload:"important data here to send"}),
+(source0 { ip:"10.0.0.1"}),
+(destination0 { ip:"10.0.0.4"}),
+
+message0-[:from]->source0,
+message0-[:to]->destination0,
+device0-[:runs]->interface0,
+interface0-[:knows]->route0,
+route0-[:contains {sinceUTC: 1374001581}]->link0,
+route0-[:contains {sinceUTC: 1374001393}]->link1,
+route0-[:contains {sinceUTC: 1374001469}]->link2,
+
+device1-[:has]->interface1,
+interface1-[:knows]->route1,
+route1-[:contains {sinceUTC: 1374001393}]->link0,
+route1-[:contains {sinceUTC: 1374001469}]->link1,
+route1-[:contains {sinceUTC: 1374001581}]->link2
+return device0,device1
+
+
+		// combined reports
+					// individual runtime reports  
+					"gateways", // gateways
+					"hna", // Host and Network Association
+					"interfaces", // network interfaces  
+									@return array of per-IP arrays of IP address, SYM, MPR, MPRS,
+									Willingness, and 2 Hop Neighbors
+					"links", // links
+					"mid", // MID
+					"neighbors", // neighbors
+					"routes", // routes
+					"topology", // mesh network topology
+					
+
+					
+	/**
+	 * immediate neighbors on the mesh
+	 * 
+	 * @return array of per-IP arrays of IP address, SYM, MPR, MPRS,
+	 *         Willingness, and 2 Hop Neighbors
+	 */
+
+
+	/**
+	 * direct connections on the mesh, i.e. nodes with direct IP connectivity
+	 * via Ad-hoc
+	 * 
+	 * @return array of per-IP arrays of Local IP, Remote IP, Hysteresis, LQ,
+	 *         NLQ, and Cost
+	 */
+
+
+	/**
+	 * IP routes to nodes on the mesh
+	 * 
+	 * @return array of per-IP arrays of Destination, Gateway IP, Metric, ETX,
+	 *         and Interface
+	 */
+
+	/**
+	 * Host and Network Association (for supporting dynamic internet gateways)
+	 * 
+	 * @return array of per-IP arrays of Destination and Gateway
+	 */
+
+
+	/**
+	 * Multiple Interface Declaration
+	 * 
+	 * @return array of per-IP arrays of IP address and Aliases
+	 */
+
+
+	/**
+	 * topology of the whole mesh
+	 * 
+	 * @return array of per-IP arrays of Destination IP, Last hop IP, LQ, NLQ,
+	 *         and Cost
+	 */
+
+
+	/**
+	 * the network interfaces that olsrd is aware of
+	 * 
+	 * @return array of per-IP arrays of Destination IP, Last hop IP, LQ, NLQ,
+	 *         and Cost
+	 */
+
+
+	/**
+	 * the gateways to other networks that this node knows about
+	 * 
+	 * @return array of per-IP arrays of Status, Gateway IP, ETX, Hopcount,
+	 *         Uplink, Downlink, IPv4, IPv6, Prefix
+	 */
+
+
+
+
+	/**
+	 * for testing from the command line
+	 */
+	public static void main(String[] args) throws IOException {
+		JsonInfo jsoninfo = new JsonInfo();
+		OlsrDataDump dump = jsoninfo.all();
+		System.out.println("gateways:");
+		for (Gateway g : dump.gateways)
+			System.out.println("\t" + g.ipAddress);
+		System.out.println("hna:");
+		for (HNA h : dump.hna)
+			System.out.println("\t" + h.destination);
+		System.out.println("Interfaces:");
+		for (Interface i : dump.interfaces)
+			System.out.println("\t" + i.name);
+		System.out.println("Links:");
+		for (Link l : dump.links)
+			System.out.println("\t" + l.localIP + " <--> " + l.remoteIP);
+		System.out.println("MID:");
+		for (MID m : dump.mid)
+			System.out.println("\t" + m.ipAddress);
+		System.out.println("Neighbors:");
+		for (Neighbor n : dump.neighbors)
+			System.out.println("\t" + n.ipv4Address);
+		System.out.println("Plugins:");
+		for (Plugin p : dump.plugins)
+			System.out.println("\t" + p.plugin);
+		System.out.println("Routes:");
+		for (Route r : dump.routes)
+			System.out.println("\t" + r.destination);
+		System.out.println("Topology:");
+		for (Node node : dump.topology)
+			System.out.println("\t" + node.destinationIP);
+	}
+}
+
+
+
+CREATE 
+(device0 { lattitude:'44.012893', longitude:'-79.441833',battery:'3' }),
+(device1 { lattitude:'45.012893', longitude:'-78.441833',battery:'4' }),
+(interface0 {  ip:'10.0.0.2' }),
+(interface1 {  ip:'10.0.0.2' }),
+(route0 { }),
+(route1 { }),
+(link0 { source: "10.0.0.1", destination: "10.0.0.2", packetloss:"8"}),
+(link1 { source: "10.0.0.1", destination: "10.0.0.3", packetloss:"7"}),
+(link2 { source: "10.0.0.2", destination: "10.0.0.3", packetloss:"6"}),
+(message0 { payload:"important data here to send"}),
+(source0 { ip:"10.0.0.1"}),
+(destination0 { ip:"10.0.0.4"}),
+
+message0-[:from]->source0,
+message0-[:to]->destination0,
+
+device0-[:runs]->interface0,
+interface0-[:knows]->route0,
+route0-[:contains {sinceUTC: 1374001581}]->link0,
+route0-[:contains {sinceUTC: 1374001393}]->link1,
+route0-[:contains {sinceUTC: 1374001469}]->link2,
+
+
+device1-[:has]->interface1,
+interface1-[:knows]->route1,
+route1-[:contains {sinceUTC: 1374001393}]->link0,
+route1-[:contains {sinceUTC: 1374001469}]->link1,
+route1-[:contains {sinceUTC: 1374001581}]->link2
+
+https://github.com/ProjectSPAN/android-manet-visualizer/blob/master/ManetSketch/ManetSketch.pde
+
+START ee=node(*) RETURN ee;
+
